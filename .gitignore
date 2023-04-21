@@ -1,0 +1,7 @@
+/pest
+/node_modules
+/model_config.json
+/model_updated_weights.txt
+/model_weights.txt
+/received_updated_weights.txt
+/__pycache__

@@ -18,4 +18,6 @@ The current network accepts monochrome images of 125x125 for 10 class classifica
 ```python init_model.py```
 
 2) Run ```node server.js``` to start the server <br/>
-   You can change the number of clients required to start the process and client percentage in server.js file. The process stops as soon as Accuracy reaches 95%.
+<br/>
+You can change the number of clients required to start the process and client percentage and accuracy at which the process stops in server.js file. The process stops as soon as Accuracy reaches 95%.
+You can stop it at any time by killing the process. It stores best model (model with highest accuracy acheived till now).

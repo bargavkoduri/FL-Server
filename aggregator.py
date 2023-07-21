@@ -2,8 +2,10 @@ import json
 from helper import read_from_file, decode_weights, ReadandProcessData, write_to_file, encode_weights
 import numpy as np
 from sklearn.metrics import accuracy_score
+import sys
 from tensorflow.keras.models import model_from_json
 
+best_accuracy = sys.argv[1]
 weights_arr = read_from_file("received_updated_weights.txt")
 weights_arr = json.loads(weights_arr)
 
@@ -50,6 +52,10 @@ for layer in model.layers:
 X_test,y_test = ReadandProcessData("pest/test")
 y_pred = model.predict(X_test,verbose=0)
 y_pred = [np.argmax(ele) for ele in y_pred]
+accuracyScore = accuracy_score(y_test,y_pred)*100
 print(accuracy_score(y_test,y_pred)*100)
+best_accuracy = (float)(best_accuracy)
+if(accuracyScore > best_accuracy):
+    model.save("best_model.h5")
 
 write_to_file('model_weights.txt',encode_weights(model.get_weights()))

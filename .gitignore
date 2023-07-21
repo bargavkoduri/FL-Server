@@ -5,3 +5,6 @@
 /model_weights.txt
 /received_updated_weights.txt
 /__pycache__
+/accuracies.txt
+/graph.ipynb
+/plot_images.ipynb

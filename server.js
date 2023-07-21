@@ -7,10 +7,14 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 
 // FL parameters
-const number_of_required_nodes = 1;
-const clients_percentage = 0.2;
+const number_of_required_nodes = 2;
+const clients_percentage = 1;
+const required_percentage = 95
+
 let started_training = false;
 let round = 0;
+let best_accuracy = 0
+let accuracies = []
 
 // Starting the serve in port number 5000
 const httpServer = createServer();
@@ -66,23 +70,32 @@ const start_training = () => {
 const update_weights = (data) => {
   weight_updates.push(data);
   if (selected_nodes.size === 0) {
+    console.log("aggregating")
     WriteToFile("received_updated_weights.txt", JSON.stringify(weight_updates))
       .then(() => {
         PythonShell.run(
           "aggregator.py",
           {
             scriptPath: "",
+            args: [best_accuracy]
           },
           (err, acc) => {
             if (!err) {
               console.log("Finished aggregating");
               console.log(`Accuracy acheived after round ${round} = ${acc}\n`);
+              accuracies.push(acc);
+              WriteToFile("accuracies.txt",JSON.stringify(accuracies))
               started_training = false;
               weight_updates = []
               acc = Number(acc)
-              if(acc < 95) {
+              if(acc > best_accuracy)
+                best_accuracy = acc
+              if(acc < required_percentage) {
                 start_training();
               }
+            }
+            else {
+              console.log(err)
             }
           }
         );
@@ -131,12 +144,15 @@ io.on("connection", (socket) => {
     console.log(`Client disconnected with id ${socket.id}`);
     if (started_training === false) {
       nodes.delete(socket);
+      selected_nodes.delete(socket)
       console.log(
         `waiting for ${
           number_of_required_nodes - nodes.size
         } more clients to be connected to start training....`
       );
     } else {
+        nodes.delete(socket);
+        selected_nodes.delete(socket);
     }
   });
 

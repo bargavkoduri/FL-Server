@@ -34,7 +34,7 @@ def ReadandProcessData(path):
     for label in class_labels:
         class_dir = os.path.join(root_dir, label)
         for file_name in os.listdir(class_dir):
-            if 'copy' in file_name:
+            if 'Copy' in file_name:
                 continue  # skip files with 'copy' in the filename
             image_path = os.path.join(class_dir, file_name)
             image = Image.open(image_path)

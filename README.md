@@ -5,7 +5,7 @@ This server acts as the coordinating entity that facilitates communication, aggr
 You can find the link to the client code <a href="https://github.com/bargavkoduri/FL-Client">here</a>
 
 # Set-Up
-To run the server make sure you have python and tensorflow installed on your system.
+To run the server make sure you have node, python and tensorflow installed on your system.
 <br/>
 To install other dependencies type
 <br/>
